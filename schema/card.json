@@ -1,0 +1,11 @@
+{
+	oid: "xxxxxxx"
+	status: "In Progress"
+	title: 'Take out Garbage'
+	priority: 5
+	expirationDate: '03-25-2019'
+	initialDate: '03-24-2019'
+	goalCategory: 'BS'
+	description: "Mike needs to take out the garbage."
+	completedDate: '03/25/2019'
+}

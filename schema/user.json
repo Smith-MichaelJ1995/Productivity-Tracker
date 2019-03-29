@@ -1,0 +1,9 @@
+{
+	username: 'Michael Smith'
+	password: 'Welcome2x19'
+	emailAccount: 'michaelsmith1388@yahoo.com'
+	name: 'Mike Smith'
+	birthday: new Date(04-18-1995)
+	journals: [],
+	importantDates: []
+}
