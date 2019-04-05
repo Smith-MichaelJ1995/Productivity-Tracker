@@ -4,22 +4,29 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database')
 
-const User = require('../models/user');
+const User = require('../models/users/UserDBFunctions');
 
-const Journal = require('../models/journal');
+// const Journal = require('../models/journal');
 
 // Register
 router.post('/register', (req, res, next) => {
+
+  // console.log('req.body = ', req.body);
+
   // res.send('REGISTER');
   let newUser = new User({
       name: req.body.name,
       email: req.body.email,
       username: req.body.username,
-      password: req.body.password
+      password: req.body.password,
+      birthday: req.body.birthday
   });
+
+  // console.log('newUser = ', newUser);
 
   User.addUser(newUser, (err, user) => {
     if(err) {
+        console.log('err = ', err)
         res.json({success: false, msg: 'Failed to register user'})
     } else {
         res.json({success: true, msg:'User registered'})
@@ -31,7 +38,7 @@ router.post('/register', (req, res, next) => {
 router.post('/authenticate', (req, res, next) => {
 
 
-  console.log('req.body = ', req.body);
+  // console.log('req.body = ', req.body);
 
   // Get params from request
   const username = req.body.username;
@@ -60,7 +67,11 @@ router.post('/authenticate', (req, res, next) => {
             id: user._id,
             name: user.name,
             username: user.username,
-            email: user.email
+            email: user.email,
+            birthday: user.birthday,
+            journals: user.journals,
+            cards: user.cards,
+            goals: user.goals
           }
         });
 
