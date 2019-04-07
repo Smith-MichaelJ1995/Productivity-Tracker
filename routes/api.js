@@ -4,17 +4,17 @@ const passport = require('passport');
 
 
 const UserRoutes = require('./users');
+const JournalRoutes = require('./journals');
 
-console.log('UserRoutes = ', UserRoutes)
 
-// Register
+// User Routes
 router.post('/register', UserRoutes.register);
-
-// Authenticate
 router.post('/authenticate', UserRoutes.authenticate);
+router.get('/profile', passport.authenticate('jwt', {session:false}), UserRoutes.profile);
 
 
-router.get('/profile', passport.authenticate('jwt', {session:false}), UserRoutes.profile)
+// Journal Routes 
+router.post('/journal', JournalRoutes.getJournalById)
 
 
 module.exports = router;
