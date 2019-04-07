@@ -1,41 +1,11 @@
-const express = require('express');
-const router = express.Router();
-const passport = require('passport');
+const User = require('../models/users/UserDBFunctions');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database')
 
-const User = require('../models/users/UserDBFunctions');
+const UserRoutes = {};
 
-// const Journal = require('../models/journal');
 
-// Register
-router.post('/register', (req, res, next) => {
-
-  // console.log('req.body = ', req.body);
-
-  // res.send('REGISTER');
-  let newUser = new User({
-      name: req.body.name,
-      email: req.body.email,
-      username: req.body.username,
-      password: req.body.password,
-      birthday: req.body.birthday
-  });
-
-  // console.log('newUser = ', newUser);
-
-  User.addUser(newUser, (err, user) => {
-    if(err) {
-        console.log('err = ', err)
-        res.json({success: false, msg: 'Failed to register user'})
-    } else {
-        res.json({success: true, msg:'User registered'})
-    }
-  });
-});
-
-// Authenticate
-router.post('/authenticate', (req, res, next) => {
+UserRoutes.authenticate =  (req, res, next) => {
 
 
   // console.log('req.body = ', req.body);
@@ -82,51 +52,36 @@ router.post('/authenticate', (req, res, next) => {
     });
 
   })
-});
+};
 
-// Profile
-router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
-  res.json({user: req.user})
-})
+UserRoutes.register = (req, res, next) => {
 
 
-// Journal
-router.post('/journal', (req, res, next) => {
-  // res.send('REGISTER');
-  // let newUser = new User({
-  //     name: req.body.name,
-  //     email: req.body.email,
-  //     username: req.body.username,
-  //     password: req.body.password
-  // });
-
-  // console.log('req.body = ', req.body);
-
-  let userParam = {
-    userID: req.body.userID,
-    date: req.body.date 
-  }
-
-  // console.log('userParam = ', userParam);
-
-  Journal.getJournalByUserID_Date(
-    userParam.userID, userParam.date, (err, data) => {
-      if(err) {
-          res.json({success: false, msg: 'Failed to register user'})
-      } else {
-          res.json({success: true, msg:'User registered', data: data})
-      }
+  let newUser = new User({
+      name: req.body.name,
+      email: req.body.email,
+      username: req.body.username,
+      password: req.body.password,
+      birthday: req.body.birthday
   });
 
-  // User.addUser(newUser, (err, user) => {
-  //   if(err) {
-  //       res.json({success: false, msg: 'Failed to register user'})
-  //   } else {
-  //       res.json({success: true, msg:'User registered'})
-  //   }
-  // });
-});
+
+  User.addUser(newUser, (err, user) => {
+    if(err) {
+        console.log('err = ', err)
+        res.json({success: false, msg: 'Failed to register user'})
+    } else {
+        res.json({success: true, msg:'User registered'})
+    }
+  });
+};
+
+UserRoutes.profile = (req, res, next) => {
+  res.json({user: req.user})
+};
 
 
 
-module.exports = router;
+
+
+module.exports = UserRoutes;
