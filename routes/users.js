@@ -77,6 +77,7 @@ UserRoutes.register = (req, res, next) => {
 };
 
 UserRoutes.profile = (req, res, next) => {
+  // console.log('inside UserRoutes.profile');
   res.json({user: req.user})
 };
 
