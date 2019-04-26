@@ -33,5 +33,13 @@ User.comparePassword = function(canidatePassword, hash, callback) {
   });
 }
 
+User.insertJournalOID = function (newJournalOID, userID, callback) {
+
+    var query = {'_id': userID};
+    
+    User.update(query, {$push: { journals: newJournalOID }}, callback);
+
+}
+
 
 module.exports = User;

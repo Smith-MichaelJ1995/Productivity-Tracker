@@ -77,9 +77,23 @@ UserRoutes.register = (req, res, next) => {
 };
 
 UserRoutes.profile = (req, res, next) => {
-  // console.log('inside UserRoutes.profile');
+  
   res.json({user: req.user})
 };
+
+// Insert Journal OID to users Journal OID collection
+UserRoutes.insertJournalOID = (req, res) => {
+
+  let newJournalOID = req.body.journalOID;
+  let userID = req.body.userID;
+
+    
+  User.update({'_id': userID}, {$push: { journals: newJournalOID }}, (err) => {
+    if (err) return res.send(500, { error: err });
+    return res.send("succesfully saved");
+  });
+  
+}
 
 
 
