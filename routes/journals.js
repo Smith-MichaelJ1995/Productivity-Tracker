@@ -1,4 +1,4 @@
-const Journal = require('../models/journals/JournalDBFunctions');
+const Journal = require('../models/journals/JournalSchema');
 
 const JournalRoutes = {};
 
@@ -24,7 +24,7 @@ JournalRoutes.getJournalById = (req, res) => {
 /* Delete Journal based on its ID value*/
 JournalRoutes.deleteJournalById = (req, res) => {
 
-  let idToBeDeleted = req.body.id;
+  const idToBeDeleted = req.body.id;
 
   Journal.findOneAndDelete(idToBeDeleted, (err, deletedJournal) => {
 
@@ -57,6 +57,35 @@ JournalRoutes.createJournalEntry = (req, res) => {
 
 }
 
+/* Update a new Journal Object */
+JournalRoutes.updateExistingJournalEntryById = (req, res) => {
+  const existingJournalId = req.body.existingJournalId; 
+  const updatedJournalBody = req.body.updatedJournalBody;
+
+  Journal.findByIdAndUpdate(
+
+    // 'id' of item to update
+    existingJournalId,
+
+    // 'body' of updated journal
+    updatedJournalBody,
+
+    // an option that asks mongoose to return the updated version 
+    // of the document instead of the pre-updated one.
+    {new: true},
+
+    // the callback function
+    (err, journal) => {
+      // Handle any possible database errors
+          if (err) return res.status(500).send(err);
+          return res.send(journal);
+    }
+
+  )
+
+
+}
+
 /* Return all Journals based on user's OIDs */
 JournalRoutes.fetchAllJournalEntries = (req, res) => {
 
@@ -73,6 +102,27 @@ JournalRoutes.fetchAllJournalEntries = (req, res) => {
     });
   })
 
+}
+
+/* Return all journal that contain a specific reg ex*/
+JournalRoutes.fetchJournalsWithMatchingText = (req, res) => {
+
+  // const  = req.params.journalTextQuery;
+  const journalTextQuery = req.body.journalTextQuery;
+  const userJournalIDs = req.body.userJournalIDs;
+
+
+  let query = {
+    '_id': { $in: userJournalIDs },
+    'text': new RegExp(journalTextQuery, "i")
+  } 
+
+  Journal.find(query, (err, journals) => {
+    if (err) return res.status(500).send(err);
+    return res.status(200).send({
+      'journals': journals,
+    });
+  })
 }
 
 

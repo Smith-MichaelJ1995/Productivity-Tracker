@@ -8,8 +8,6 @@ const UserRoutes = {};
 UserRoutes.authenticate =  (req, res, next) => {
 
 
-  // console.log('req.body = ', req.body);
-
   // Get params from request
   const username = req.body.username;
   const password = req.body.password;
@@ -68,7 +66,7 @@ UserRoutes.register = (req, res, next) => {
 
   User.addUser(newUser, (err, user) => {
     if(err) {
-        console.log('err = ', err)
+        // console.log('err = ', err)
         res.json({success: false, msg: 'Failed to register user'})
     } else {
         res.json({success: true, msg:'User registered'})
@@ -93,6 +91,18 @@ UserRoutes.insertJournalOID = (req, res) => {
     return res.send("succesfully saved");
   });
   
+}
+
+UserRoutes.deleteJournalOID = (req, res) => {
+
+  let oldJournalOID = req.body.journalOID;
+  let userID = req.body.userID;
+
+  User.update({'_id': userID}, {$pull: { journals: oldJournalOID }}, (err) => {
+    if (err) return res.send(500, { error: err });
+    return res.send("succesfully deleted");
+  });
+
 }
 
 

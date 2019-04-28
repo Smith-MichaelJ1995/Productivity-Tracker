@@ -16,12 +16,22 @@ router.get('/profile', passport.authenticate('jwt', {session:false}), UserRoutes
 
 // ORGANIZE ROUTES BY WHICH FRONT END SERVICE THEIR DEFINED IN
 
-// Journal Routes 
+// Journal Routes - fetching journal records
 router.get('/getJournalById/:id', JournalRoutes.getJournalById);
-router.post('/deleteJournalById', JournalRoutes.deleteJournalById);
-router.post('/createJournal', JournalRoutes.createJournalEntry);
-router.put('/insertJournalOID', UserRoutes.insertJournalOID);
+router.post('/fetchJournalsWithMatchingText', JournalRoutes.fetchJournalsWithMatchingText);
 router.post('/fetchAllJournalEntries', JournalRoutes.fetchAllJournalEntries);
+
+// Journal Routes - update, delete, create a record in Journal DB
+router.put('/updateJournalById', JournalRoutes.updateExistingJournalEntryById)
+router.delete('/deleteJournalById', JournalRoutes.deleteJournalById);
+router.post('/createJournal', JournalRoutes.createJournalEntry);
+
+// Insert journal ID to user's collection.
+router.put('/insertJournalOID', UserRoutes.insertJournalOID);
+
+// delete journal ID from user's collection.
+router.put('/deleteJournalOID', UserRoutes.deleteJournalOID)
+
 
 
 
